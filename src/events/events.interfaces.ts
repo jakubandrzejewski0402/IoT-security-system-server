@@ -1,5 +1,6 @@
 export type EventData = {
     deviceId: string;
+    eventType: string;
 };
 
-export type LowBatteryEventData = EventData & { batteryLevel: number };
+export type BatteryEventData = EventData & { batteryLevel: number };

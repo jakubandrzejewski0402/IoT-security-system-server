@@ -1,12 +1,13 @@
 export interface Device {
     id: string;
     name: string;
-    phoneNumber: string;
+    ownerPhoneNumber: string;
 }
 
-export interface Action {
+export interface Event {
+    id: string;
     deviceId: string;
-    actionType: string;
-    actionBody: object;
-    timestamp: number;
+    type: string;
+    data: object;
+    dateOfCreation: number;
 }

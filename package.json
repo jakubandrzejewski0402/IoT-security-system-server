@@ -3,23 +3,25 @@
     "version": "1.0.0",
     "main": "build/app.js",
     "scripts": {
-        "dev": "NODE_ENV=development nodemon",
-        "dev:windows": "SET NODE_ENV=development&& nodemon",
+        "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
+        "dev:windows": "SET NODE_ENV=development&& nodemon --exec ts-node src/index.ts",
         "build": "tsc -p .",
-        "serve": "node build/app.js"
+        "start": "node build/index.js"
     },
     "dependencies": {
+        "@aws-sdk/client-sns": "^3.484.0",
         "eventemitter3": "^4.0.7",
         "express": "^4.17.1",
         "joi": "^17.11.0",
         "mongodb": "^6.3.0",
-        "twilio": "^4.20.0",
+        "uuid": "^9.0.1",
         "winston": "^3.11.0",
         "winston-mongodb": "^5.1.1"
     },
     "devDependencies": {
         "@types/express": "^4.17.13",
         "@types/node": "^16.11.7",
+        "@types/uuid": "^9.0.7",
         "@types/winston": "^2.4.4",
         "dotenv-flow": "^4.1.0",
         "nodemon": "^3.0.2",
