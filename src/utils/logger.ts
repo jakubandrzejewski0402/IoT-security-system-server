@@ -1,12 +1,19 @@
-import { NextFunction, Request } from 'express';
-import logger from '../config/logger';
-import { EVENT, LISTENER_SET_UP_FOR } from '../constants/logger';
+import logger from '../config/logger.config';
+import { DeviceStatus } from '../constants/constants';
 
 export const logSetupEventListener = (eventType: string) => {
-    logger.info(`${LISTENER_SET_UP_FOR} ${eventType} ${EVENT}`);
+    logger.info(`Listener set up for ${eventType} event`);
 };
 
-export const requestLogger = (req: Request, _: unknown, next: NextFunction) => {
-    logger.info(`Received ${req.method} request at ${req.originalUrl}`);
-    next();
+export const logNotFound = (id: string, toFound: string) => {
+    logger.error(`Not found ${toFound} with id: ${id}`);
+};
+
+export const logSuccesfullyChangedStatus = (
+    deviceName: string,
+    status: DeviceStatus
+) => {
+    logger.info(
+        `Status changed successfully for device ${deviceName} to ${status}`
+    );
 };

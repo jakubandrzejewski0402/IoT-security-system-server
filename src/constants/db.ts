@@ -1,3 +1,4 @@
 export const DEVICE = 'device';
 export const LOGS = 'logs';
-export const ACTION = 'action';
+export const EVENT = 'event';
+export const USER = 'user';

@@ -11,7 +11,9 @@ const required = (key: string, variable: string | undefined): string => {
 };
 
 export const appConfig = {
-    PORT: process.env.PORT,
+    PROTOCOL: process.env.PROTOCOL,
+    HOSTNAME: process.env.HOSTNAME,
+    PORT: process.env.PORT || 3000,
     MONGO_URL: required('MONGO_URL', process.env.MONGO_URL),
     TWILIO_ACCOUNT_SID: required(
         'TWILIO_ACCOUNT_SID',

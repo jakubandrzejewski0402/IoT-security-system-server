@@ -1,5 +1,5 @@
-import logger from '../config/logger';
-import { HTTP_CODE } from '../constants/http.codes';
+import logger from '../config/logger.config';
+import { HTTP_CODE } from '../constants/constants';
 import { AppError } from './error.module';
 import { NextFunction, Request, Response } from 'express';
 
@@ -14,12 +14,12 @@ interface ErrorHandler {
 
 const internalServerError = {
     code: 'internal/error',
-    data: 'Internal server error. We are working on it!',
+    data: "Temporary technical issue. We're fixing it. Thanks for your patience!",
 };
 
 export const errorHandler: ErrorHandler = (
     error: Error | AppError,
-    _: unknown,
+    _: Request,
     res: Response,
     next: NextFunction
 ) => {

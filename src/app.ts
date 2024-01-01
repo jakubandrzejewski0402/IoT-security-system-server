@@ -1,17 +1,13 @@
 import express, { Express } from 'express';
-import alarmArmedController from './controllers/alarmController';
-import intrudedController from './controllers/intrudedController';
-import lowBatteryController from './controllers/lowBatteryController';
+import alarmController from './controllers/event.controller';
 import { errorHandler } from './error/error.handler';
-import { requestLogger } from './utils/logger';
+import { saveAndLogEvent } from './utils/events/event.interceptor';
 
 const app: Express = express()
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
-    .use(requestLogger)
-    .use(alarmArmedController)
-    .use(intrudedController)
-    .use(lowBatteryController)
+    .use(saveAndLogEvent)
+    .use(alarmController)
     .use(errorHandler);
 
 export default app;

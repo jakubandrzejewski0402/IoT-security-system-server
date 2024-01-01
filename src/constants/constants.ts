@@ -1,3 +1,8 @@
+export enum DeviceStatus {
+    ARMED = 'armed',
+    DISARMED = 'dis-armed',
+}
+
 export enum HTTP_CODE {
     OK = 200,
     CREATED = 201,

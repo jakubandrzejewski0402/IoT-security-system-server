@@ -1,4 +1,4 @@
-import { HTTP_CODE } from '../constants/http.codes';
+import { HTTP_CODE } from '../constants/constants';
 import { ErrorCodes } from './error.codes';
 
 export interface AppError {

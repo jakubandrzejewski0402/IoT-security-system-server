@@ -1,5 +1,8 @@
+import { EventType } from '../constants/event.type';
+
 export type EventData = {
     deviceId: string;
+    eventType: EventType;
 };
 
-export type LowBatteryEventData = EventData & { batteryLevel: number };
+export type BatteryEventData = EventData & { batteryLevel: number };
