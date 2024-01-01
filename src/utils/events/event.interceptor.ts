@@ -1,5 +1,5 @@
 import { EventRepository } from '../../repository/event.repository';
-import { Event } from '../../db/mongo.interfaces';
+import { InternalEvent } from '../../db/mongo.interfaces';
 import { NextFunction, Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import logger from '../../config/logger.config';
@@ -10,7 +10,7 @@ export const saveAndLogEvent = async (
     next: NextFunction
 ) => {
     const { eventType, deviceId, ...rest } = req.body;
-    const event: Event = {
+    const event: InternalEvent = {
         id: uuid(),
         deviceId: deviceId,
         type: eventType,

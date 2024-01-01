@@ -1,6 +1,7 @@
 import { Mongo } from '../db/mongo';
-import { Event } from '../db/mongo.interfaces';
+import { InternalEvent } from '../db/mongo.interfaces';
 
 export class EventRepository {
-    public static insertOne = (event: Event) => Mongo.event().insertOne(event);
+    public static insertOne = (event: InternalEvent) =>
+        Mongo.event().insertOne(event);
 }

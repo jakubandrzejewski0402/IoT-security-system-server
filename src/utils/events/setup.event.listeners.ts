@@ -3,7 +3,7 @@ import { handleAlarmStatusChange } from '../../events/alarm.handler';
 import { handleBattery } from '../../events/battery.handler';
 import { handleIntruded } from '../../events/intruded.handler';
 import { logSetupEventListener } from '../logger';
-import { EventType } from '../../constants/constants';
+import { EventType } from '../../constants/event.type';
 
 type EventHandler = (...args: any[]) => void;
 

@@ -1,4 +1,4 @@
-import { EventType } from '../constants/constants';
+import { EventType } from '../constants/event.type';
 
 export type EventData = {
     deviceId: string;

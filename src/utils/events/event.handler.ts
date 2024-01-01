@@ -1,9 +1,6 @@
 import logger from '../../config/logger.config';
-import {
-    ChangeStatusParams,
-    DeviceStatus,
-    RetryParams,
-} from '../../constants/constants';
+import { DeviceStatus } from '../../constants/constants';
+import { Device, User } from '../../db/mongo.interfaces';
 import { DeviceRepository } from '../../repository/device.repository';
 import { logNotFound, logSuccesfullyChangedStatus } from '../logger';
 import { sendChangeAlarmStatusSMS } from '../sms';
@@ -20,28 +17,29 @@ const isValidStatusChange = (
     return statusToSet === DeviceStatus.ARMED;
 };
 
-export const canChangeStatus = ({
-    deviceId,
-    currentStatus,
-    statusToSet,
-}: ChangeStatusParams): boolean => {
-    const delayToChangeStatus = 7000;
-
+export const canChangeStatus = (
+    deviceId: string,
+    currentStatus: DeviceStatus,
+    statusToSet: DeviceStatus
+): boolean => {
+    const semaphoreDelay = 7000;
     const lastChange = lastChangeTimestamps.get(deviceId);
     const now = Date.now();
 
-    const canChange = !lastChange || now - lastChange >= delayToChangeStatus;
+    const canChange = !lastChange || now - lastChange >= semaphoreDelay;
     const isValid = isValidStatusChange(currentStatus, statusToSet);
-    if (canChange && isValid) lastChangeTimestamps.set(deviceId, now);
+    const isChangeAllowed = canChange && isValid;
 
-    return canChange && isValid;
+    if (isChangeAllowed) lastChangeTimestamps.set(deviceId, now);
+
+    return isChangeAllowed;
 };
 
-export const retryChangeStatus = async ({
-    deviceId,
-    statusToSet,
-    user,
-}: RetryParams) => {
+export const retryChangeStatus = async (
+    deviceId: string,
+    statusToSet: DeviceStatus,
+    user: User
+) => {
     const retryDelay = 14000;
 
     setTimeout(async () => {
@@ -51,22 +49,21 @@ export const retryChangeStatus = async ({
             return;
         }
 
-        if (
-            canChangeStatus({
-                deviceId,
-                currentStatus: device.status,
-                statusToSet,
-            })
-        ) {
-            await DeviceRepository.updateStatus(deviceId, statusToSet);
-            logSuccesfullyChangedStatus(deviceId, statusToSet);
-            await sendChangeAlarmStatusSMS(
-                user.phoneNumber,
-                device.name,
-                statusToSet
-            );
-        } else {
-            logger.error(`Failed to change status for device ${deviceId}`);
+        if (canChangeStatus(deviceId, device.status, statusToSet)) {
+            await changeStatusAndNotifyUser(device, statusToSet, user);
+            return;
         }
+
+        logger.error(`Failed to change status for device ${device.name}`);
     }, retryDelay);
+};
+
+export const changeStatusAndNotifyUser = async (
+    device: Device,
+    statusToSet: DeviceStatus,
+    user: User
+) => {
+    await DeviceRepository.updateStatus(device.id, statusToSet);
+    logSuccesfullyChangedStatus(device.id, statusToSet);
+    await sendChangeAlarmStatusSMS(user.phoneNumber, device.name, statusToSet);
 };

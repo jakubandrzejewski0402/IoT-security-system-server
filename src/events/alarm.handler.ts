@@ -1,46 +1,29 @@
 import logger from '../config/logger.config';
-import {
-    DeviceStatus,
-    EventType,
-    changeStatusIfPossibleParams,
-} from '../constants/constants';
+import { DeviceStatus } from '../constants/constants';
+import { EventType } from '../constants/event.type';
 import { Device, User } from '../db/mongo.interfaces';
 import { DeviceRepository } from '../repository/device.repository';
 import { UserRepository } from '../repository/user.repository';
 import {
     canChangeStatus,
+    changeStatusAndNotifyUser,
     retryChangeStatus,
 } from '../utils/events/event.handler';
-import { logNotFound, logSuccesfullyChangedStatus } from '../utils/logger';
-import { sendChangeAlarmStatusSMS } from '../utils/sms';
+import { logNotFound } from '../utils/logger';
 import { EventData } from './events.interfaces';
 
-const changeStatusIfPossible = async ({
-    device,
-    currentStatus,
-    statusToSet,
-    user,
-}: changeStatusIfPossibleParams) => {
-    if (
-        canChangeStatus({
-            deviceId: device.id,
-            currentStatus,
-            statusToSet,
-        })
-    ) {
-        await DeviceRepository.updateStatus(device.id, statusToSet);
-        logSuccesfullyChangedStatus(device.id, statusToSet);
-        await sendChangeAlarmStatusSMS(
-            user.phoneNumber,
-            device.name,
-            statusToSet
-        );
-    } else
-        await retryChangeStatus({
-            deviceId: device.id,
-            statusToSet,
-            user,
-        });
+const tryChangingStatus = async (
+    device: Device,
+    currentStatus: DeviceStatus,
+    statusToSet: DeviceStatus,
+    user: User
+) => {
+    if (canChangeStatus(device.id, currentStatus, statusToSet)) {
+        await changeStatusAndNotifyUser(device, statusToSet, user);
+        return;
+    }
+
+    await retryChangeStatus(device.id, statusToSet, user);
 };
 
 export const handleAlarmStatusChange = ({ deviceId, eventType }: EventData) => {
@@ -67,11 +50,6 @@ export const handleAlarmStatusChange = ({ deviceId, eventType }: EventData) => {
                 ? DeviceStatus.ARMED
                 : DeviceStatus.DISARMED;
 
-        await changeStatusIfPossible({
-            device,
-            currentStatus,
-            statusToSet,
-            user,
-        });
+        await tryChangingStatus(device, currentStatus, statusToSet, user);
     });
 };

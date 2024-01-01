@@ -1,4 +1,5 @@
-import { DeviceStatus, EventType } from '../constants/constants';
+import { DeviceStatus } from '../constants/constants';
+import { EventType } from '../constants/event.type';
 
 export interface Device {
     id: string;
@@ -8,7 +9,7 @@ export interface Device {
     lastMovementDate: number;
 }
 
-export interface Event {
+export interface InternalEvent {
     id: string;
     deviceId: string;
     type: EventType;

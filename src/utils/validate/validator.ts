@@ -7,7 +7,7 @@ import {
     batterySchema,
     intruderSchema,
 } from './validation.schemas';
-import { EventType } from '../../constants/constants';
+import { EventType } from '../../constants/event.type';
 
 export const findSchema = (eventType: string) => {
     switch (eventType) {
