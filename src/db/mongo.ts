@@ -1,6 +1,6 @@
 import { Db, MongoClient } from 'mongodb';
-import { Event, Device } from './mongo.interfaces';
-import { EVENT, DEVICE } from '../constants/db';
+import { Event, Device, User } from './mongo.interfaces';
+import { EVENT, DEVICE, USER } from '../constants/db';
 
 export class Mongo {
     private static mongo: Db;
@@ -15,4 +15,5 @@ export class Mongo {
     public static close = () => this.client.close();
     public static device = () => Mongo.mongo.collection<Device>(DEVICE);
     public static event = () => Mongo.mongo.collection<Event>(EVENT);
+    public static user = () => Mongo.mongo.collection<User>(USER);
 }

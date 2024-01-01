@@ -1,8 +1,9 @@
 import logger from '../config/logger.config';
-import { Device } from '../db/mongo.interfaces';
+import { Device, User } from '../db/mongo.interfaces';
 import { DeviceRepository } from '../repository/device.repository';
+import { UserRepository } from '../repository/user.repository';
 import { sendSMS } from '../services/sms.service';
-import { logNotFoundDevice } from '../utils/logger';
+import { logNotFound } from '../utils/logger';
 import { EventData } from './events.interfaces';
 
 export const handleIntruded = ({ deviceId }: EventData) => {
@@ -11,11 +12,20 @@ export const handleIntruded = ({ deviceId }: EventData) => {
 
         const device: Device | null = await DeviceRepository.findOne(deviceId);
         if (!device) {
-            logNotFoundDevice(deviceId);
+            logNotFound(deviceId, 'device');
             return;
         }
 
+        const user: User | null = await UserRepository.findOne(device.ownerId);
+        if (!user) {
+            logNotFound(device.ownerId, 'user');
+            return;
+        }
+
+        const now = Date.now();
+        DeviceRepository.updateLastMovementDate(deviceId, now);
+
         const messageBody = `Intrusion detected for device ${device.name}`;
-        await sendSMS(device.ownerPhoneNumber, messageBody);
+        await sendSMS(user.phoneNumber, messageBody);
     });
 };

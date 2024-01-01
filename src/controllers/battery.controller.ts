@@ -1,7 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import { emitEvent } from '../utils/events/event.emitter';
-import { BATTERY_PATH } from '../constants/paths';
-import { HTTP_CODE } from '../constants/http.codes';
+import { BATTERY_PATH, HTTP_CODE } from '../constants/constants';
 import { validateRequest } from '../utils/validate/validator';
 
 const router: Router = express.Router();

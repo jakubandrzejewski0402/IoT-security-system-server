@@ -1,30 +1,32 @@
-import { Request, NextFunction } from 'express';
+import { Request, NextFunction, Response } from 'express';
 import { ObjectSchema, ValidationResult } from 'joi';
 import { ValidationError } from '../../error/error.module';
-import {
-    ALARM_ARMED,
-    ALARM_DISARMED,
-    BATTERY,
-    INTRUDED,
-} from '../../constants/event.types';
 import {
     alarmArmedSchema,
     alarmDisarmedSchema,
     batterySchema,
     intruderSchema,
 } from './validation.schemas';
+import { EventType } from '../../constants/constants';
 
 export const findSchema = (eventType: string) => {
-    if (eventType === ALARM_ARMED) return alarmArmedSchema;
-    if (eventType === ALARM_DISARMED) return alarmDisarmedSchema;
-    if (eventType === INTRUDED) return intruderSchema;
-    if (eventType === BATTERY) return batterySchema;
-    return null;
+    switch (eventType) {
+        case EventType.ALARM_ARMED:
+            return alarmArmedSchema;
+        case EventType.ALARM_DISARMED:
+            return alarmDisarmedSchema;
+        case EventType.INTRUDED:
+            return intruderSchema;
+        case EventType.BATTERY:
+            return batterySchema;
+        default:
+            return null;
+    }
 };
 
 export const validateRequest = (
     req: Request,
-    _: unknown,
+    _: Response,
     next: NextFunction
 ) => {
     const schema: ObjectSchema | null = findSchema(req.body.eventType);

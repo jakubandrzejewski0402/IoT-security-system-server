@@ -15,13 +15,16 @@ export const appConfig = {
     HOSTNAME: process.env.HOSTNAME || 'localhost',
     PORT: process.env.PORT || 3000,
     MONGO_URL: required('MONGO_URL', process.env.MONGO_URL),
-    AWS_ACCESS_KEY_ID: required(
-        'AWS_ACCESS_KEY_ID',
-        process.env.AWS_ACCESS_KEY_ID
+    TWILIO_ACCOUNT_SID: required(
+        'TWILIO_ACCOUNT_SID',
+        process.env.TWILIO_ACCOUNT_SID
     ),
-    AWS_SECRET_ACCESS_KEY: required(
-        'AWS_SECRET_ACCESS_KEY',
-        process.env.AWS_SECRET_ACCESS_KEY
+    TWILIO_AUTH_TOKEN: required(
+        'TWILIO_AUTH_TOKEN',
+        process.env.TWILIO_AUTH_TOKEN
     ),
-    AWS_REGION: required('AWS_REGION', process.env.AWS_REGION),
+    TWILIO_PHONE_NUMBER: required(
+        'TWILIO_PHONE_NUMBER',
+        process.env.TWILIO_PHONE_NUMBER
+    ),
 };

@@ -1,18 +1,22 @@
-import { snsClient } from '../config/aws.config';
-import { PublishCommand } from '@aws-sdk/client-sns';
+import Twilio from 'twilio';
 import logger from '../config/logger.config';
+import { appConfig } from '../config/app.config';
+
+const twilioClient = Twilio(
+    appConfig.TWILIO_ACCOUNT_SID,
+    appConfig.TWILIO_AUTH_TOKEN
+);
 
 export const sendSMS = async (to: string, body: string) => {
-    const params = {
-        Message: body,
-        PhoneNumber: to,
-    };
-
     try {
-        const publishCommand = new PublishCommand(params);
-        const res = await snsClient.send(publishCommand);
+        const message = await twilioClient.messages.create({
+            body: body,
+            to: to,
+            from: appConfig.TWILIO_PHONE_NUMBER,
+        });
+
         logger.info(
-            `SMS sent successfully to ${to}. Message ID: ${res.MessageId}`
+            `SMS sent successfully to ${to}. Message SID: ${message.sid}`
         );
     } catch (error: any) {
         logger.error(`Failed to send SMS to ${to}: ${error.message}`);

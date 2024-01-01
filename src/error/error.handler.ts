@@ -1,5 +1,5 @@
 import logger from '../config/logger.config';
-import { HTTP_CODE } from '../constants/http.codes';
+import { HTTP_CODE } from '../constants/constants';
 import { AppError } from './error.module';
 import { NextFunction, Request, Response } from 'express';
 
@@ -19,7 +19,7 @@ const internalServerError = {
 
 export const errorHandler: ErrorHandler = (
     error: Error | AppError,
-    _: unknown,
+    _: Request,
     res: Response,
     next: NextFunction
 ) => {

@@ -1,36 +1,78 @@
 import logger from '../config/logger.config';
-import { Device } from '../db/mongo.interfaces';
+import {
+    DeviceStatus,
+    EventType,
+    changeStatusIfPossibleParams,
+} from '../constants/constants';
+import { Device, User } from '../db/mongo.interfaces';
 import { DeviceRepository } from '../repository/device.repository';
-import { sendSMS } from '../services/sms.service';
-import { logNotFoundDevice } from '../utils/logger';
+import { UserRepository } from '../repository/user.repository';
+import {
+    canChangeStatus,
+    retryChangeStatus,
+} from '../utils/events/event.handler';
+import { logNotFound, logSuccesfullyChangedStatus } from '../utils/logger';
+import { sendChangeAlarmStatusSMS } from '../utils/sms';
 import { EventData } from './events.interfaces';
 
-export const handleAlarmArmed = ({ deviceId }: EventData) => {
-    setImmediate(async () => {
-        logger.info(`Alarm Armed event for device ${deviceId} received.`);
-
-        const device: Device | null = await DeviceRepository.findOne(deviceId);
-        if (!device) {
-            logNotFoundDevice(deviceId);
-            return;
-        }
-
-        const messageBody = `Alarm armed for device ${device.name}`;
-        await sendSMS(device.ownerPhoneNumber, messageBody);
-    });
+const changeStatusIfPossible = async ({
+    device,
+    currentStatus,
+    statusToSet,
+    user,
+}: changeStatusIfPossibleParams) => {
+    if (
+        canChangeStatus({
+            deviceId: device.id,
+            currentStatus,
+            statusToSet,
+        })
+    ) {
+        await DeviceRepository.updateStatus(device.id, statusToSet);
+        logSuccesfullyChangedStatus(device.id, statusToSet);
+        await sendChangeAlarmStatusSMS(
+            user.phoneNumber,
+            device.name,
+            statusToSet
+        );
+    } else
+        await retryChangeStatus({
+            deviceId: device.id,
+            currentStatus,
+            statusToSet,
+            user,
+        });
 };
 
-export const handleAlarmDisarmed = ({ deviceId }: EventData) => {
+export const handleAlarmStatusChange = ({ deviceId, eventType }: EventData) => {
     setImmediate(async () => {
-        logger.info(`Alarm Disarmed event for device ${deviceId} received.`);
+        logger.info(
+            `Change alarm status event for device ${deviceId} received. Event type: ${eventType}`
+        );
 
         const device: Device | null = await DeviceRepository.findOne(deviceId);
         if (!device) {
-            logNotFoundDevice(deviceId);
+            logNotFound(deviceId, 'device');
             return;
         }
 
-        const messageBody = `Alarm disarmed for device ${device.name}`;
-        await sendSMS(device.ownerPhoneNumber, messageBody);
+        const user: User | null = await UserRepository.findOne(device.ownerId);
+        if (!user) {
+            logNotFound(device.ownerId, 'user');
+            return;
+        }
+
+        const currentStatus = device.status;
+        const statusToSet =
+            eventType === EventType.ALARM_ARMED
+                ? DeviceStatus.ARMED
+                : DeviceStatus.DISARMED;
+
+        await changeStatusIfPossible({
+            device,
+            currentStatus,
+            statusToSet,
+            user,
+        });
     });
 };

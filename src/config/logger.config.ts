@@ -1,7 +1,7 @@
 import { createLogger, format, transports } from 'winston';
-import 'winston-mongodb';
 import { appConfig } from './app.config';
 import { LOGS } from '../constants/db';
+import 'winston-mongodb';
 
 const { combine, timestamp, printf } = format;
 

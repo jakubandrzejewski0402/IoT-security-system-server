@@ -1,13 +1,23 @@
+import { DeviceStatus, EventType } from '../constants/constants';
+
 export interface Device {
     id: string;
     name: string;
-    ownerPhoneNumber: string;
+    ownerId: string;
+    status: DeviceStatus;
+    lastMovementDate: number;
 }
 
 export interface Event {
     id: string;
     deviceId: string;
-    type: string;
-    data: object;
+    type: EventType;
+    eventParams: object;
     dateOfCreation: number;
+}
+
+export interface User {
+    id: string;
+    name: string;
+    phoneNumber: string;
 }
