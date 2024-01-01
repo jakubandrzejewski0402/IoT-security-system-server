@@ -39,7 +39,6 @@ export const canChangeStatus = ({
 
 export const retryChangeStatus = async ({
     deviceId,
-    currentStatus,
     statusToSet,
     user,
 }: RetryParams) => {
@@ -55,7 +54,7 @@ export const retryChangeStatus = async ({
         if (
             canChangeStatus({
                 deviceId,
-                currentStatus,
+                currentStatus: device.status,
                 statusToSet,
             })
         ) {

@@ -31,7 +31,11 @@ export type ChangeStatusParams = {
     statusToSet: DeviceStatus;
 };
 
-export type RetryParams = ChangeStatusParams & { user: User };
+export type RetryParams = {
+    deviceId: string;
+    statusToSet: DeviceStatus;
+    user: User;
+};
 
 export type changeStatusIfPossibleParams = {
     device: Device;

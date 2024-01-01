@@ -38,7 +38,6 @@ const changeStatusIfPossible = async ({
     } else
         await retryChangeStatus({
             deviceId: device.id,
-            currentStatus,
             statusToSet,
             user,
         });
