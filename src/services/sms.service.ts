@@ -11,6 +11,12 @@ export const sendSMS = async (to: string, body: string) => {
         const params = {
             Message: body,
             PhoneNumber: to,
+            MessageAttributes: {
+                'AWS.SNS.SMS.SenderID': {
+                    DataType: 'String',
+                    StringValue: 'GuardianAlert',
+                },
+            },
         };
 
         const command = new PublishCommand(params);
