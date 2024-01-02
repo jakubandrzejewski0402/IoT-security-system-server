@@ -4,6 +4,7 @@ import { DeviceRepository } from '../repository/device.repository';
 import { UserRepository } from '../repository/user.repository';
 import { sendSMS } from '../services/sms.service';
 import { logNotFound } from '../utils/logger';
+import { createBatterySmsMessage } from '../utils/sms.messages';
 import { BatteryEventData } from './events.interfaces';
 
 export const handleBattery = ({ deviceId, batteryLevel }: BatteryEventData) => {
@@ -24,7 +25,11 @@ export const handleBattery = ({ deviceId, batteryLevel }: BatteryEventData) => {
             return;
         }
 
-        const messageBody = `Current battery level for device ${device.name} is ${batteryLevel}%. Remember to keep device charged.`;
+        const messageBody = createBatterySmsMessage(
+            device.name,
+            batteryLevel,
+            user.name
+        );
         sendSMS(user.phoneNumber, messageBody);
     });
 };

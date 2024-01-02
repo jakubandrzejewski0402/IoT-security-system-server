@@ -3,4 +3,3 @@
 .env.development
 yarn.lock
 dist
-.ebextensions

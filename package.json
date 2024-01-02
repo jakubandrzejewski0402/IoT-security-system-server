@@ -9,11 +9,11 @@
         "start": "node dist/index.js"
     },
     "dependencies": {
+        "@aws-sdk/client-sns": "^3.484.0",
         "eventemitter3": "^4.0.7",
         "express": "^4.17.1",
         "joi": "^17.11.0",
         "mongodb": "^6.3.0",
-        "twilio": "^4.20.0",
         "uuid": "^9.0.1",
         "winston": "^3.11.0",
         "winston-mongodb": "^5.1.1"

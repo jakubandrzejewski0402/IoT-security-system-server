@@ -4,6 +4,7 @@ import { DeviceRepository } from '../repository/device.repository';
 import { UserRepository } from '../repository/user.repository';
 import { sendSMS } from '../services/sms.service';
 import { logNotFound } from '../utils/logger';
+import { createIntrusionSmsMessage } from '../utils/sms.messages';
 import { EventData } from './events.interfaces';
 
 export const handleIntruded = ({ deviceId }: EventData) => {
@@ -25,7 +26,7 @@ export const handleIntruded = ({ deviceId }: EventData) => {
         const now = Date.now();
         DeviceRepository.updateLastMovementDate(deviceId, now);
 
-        const messageBody = `Intrusion detected for device ${device.name}`;
+        const messageBody = createIntrusionSmsMessage(device.name);
         await sendSMS(user.phoneNumber, messageBody);
     });
 };
