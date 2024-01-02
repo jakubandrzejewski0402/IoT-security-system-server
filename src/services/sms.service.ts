@@ -14,7 +14,7 @@ export const sendSMS = async (to: string, body: string) => {
             MessageAttributes: {
                 'AWS.SNS.SMS.SenderID': {
                     DataType: 'String',
-                    StringValue: 'GuardianAlert',
+                    StringValue: 'Guard-Alert',
                 },
             },
         };

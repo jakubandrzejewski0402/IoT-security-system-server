@@ -9,7 +9,7 @@ Mongo.connect(appConfig.MONGO_URL).then(() => {
 
     app.listen(appConfig.PORT, () => {
         logger.info(
-            `Server is running at ${appConfig.PROTOCOL}://${appConfig.HOSTNAME}:${appConfig.PORT}`
+            `Server is running on port ${appConfig.PORT} in ${appConfig.NODE_ENV} mode`
         );
     });
 });

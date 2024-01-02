@@ -11,9 +11,8 @@ const required = (key: string, variable: string | undefined): string => {
 };
 
 export const appConfig = {
-    PROTOCOL: process.env.PROTOCOL,
-    HOSTNAME: process.env.HOSTNAME,
     PORT: process.env.PORT || 3000,
+    NODE_ENV: required('NODE_ENV', process.env.NODE_ENV),
     MONGO_URL: required('MONGO_URL', process.env.MONGO_URL),
     AWS_REGION: required('AWS_REGION', process.env.AWS_REGION),
 };
