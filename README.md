@@ -12,7 +12,7 @@ Welcome to the IoT Security System Server-side Application! This platform is exp
 
 ## Tech Stack
 
-This project is built using Node.js, Express.js, TypeScript, MongoDb, EventEmitter3 and Twilio.
+This project is built using Node.js, Express.js, TypeScript, MongoDb, EventEmitter3 and AWS SNS.
 
 ## How to Run
 
