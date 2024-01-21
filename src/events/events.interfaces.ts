@@ -6,3 +6,5 @@ export type EventData = {
 };
 
 export type BatteryEventData = EventData & { batteryLevel: number };
+
+export type GasEventData = EventData & { gasLevel: number };

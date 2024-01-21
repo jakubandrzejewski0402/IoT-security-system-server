@@ -20,3 +20,9 @@ export const batterySchema = Joi.object({
     deviceId: Joi.string().required(),
     batteryLevel: Joi.number().min(0).max(100).required(),
 });
+
+export const gasSchema = Joi.object({
+    eventType: Joi.string().required(),
+    deviceId: Joi.string().required(),
+    gasLevel: Joi.number().required(),
+});

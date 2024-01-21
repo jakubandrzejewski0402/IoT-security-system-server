@@ -5,7 +5,7 @@ import { HTTP_CODE } from '../constants/constants';
 
 const router: Router = express.Router();
 
-router.put(
+router.post(
     `/event`,
     validateRequest,
     emitEvent,

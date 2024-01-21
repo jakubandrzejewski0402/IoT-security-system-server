@@ -4,6 +4,7 @@ import { handleBattery } from '../../events/battery.handler';
 import { handleIntruded } from '../../events/intruded.handler';
 import { logSetupEventListener } from '../logger';
 import { EventType } from '../../constants/event.type';
+import { handleGas } from '../../events/gas.handler';
 
 type EventHandler = (...args: any[]) => void;
 
@@ -17,4 +18,5 @@ export const setupEventListeners = () => {
     setupListener(EventType.ALARM_DISARMED, handleAlarmStatusChange);
     setupListener(EventType.BATTERY, handleBattery);
     setupListener(EventType.INTRUDED, handleIntruded);
+    setupListener(EventType.GAS, handleGas);
 };

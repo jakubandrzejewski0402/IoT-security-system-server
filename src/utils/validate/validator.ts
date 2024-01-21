@@ -6,6 +6,7 @@ import {
     alarmDisarmedSchema,
     batterySchema,
     intruderSchema,
+    gasSchema,
 } from './validation.schemas';
 import { EventType } from '../../constants/event.type';
 
@@ -19,6 +20,8 @@ export const findSchema = (eventType: string) => {
             return intruderSchema;
         case EventType.BATTERY:
             return batterySchema;
+        case EventType.GAS:
+            return gasSchema;
         default:
             return null;
     }
