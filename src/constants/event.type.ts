@@ -3,5 +3,5 @@ export enum EventType {
     ALARM_DISARMED = 'alarm-disarmed',
     BATTERY = 'battery',
     INTRUDED = 'intruded',
-    GAS = 'gas',
+    GAS_LEVEL = 'gas-level',
 }

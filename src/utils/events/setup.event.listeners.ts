@@ -18,5 +18,5 @@ export const setupEventListeners = () => {
     setupListener(EventType.ALARM_DISARMED, handleAlarmStatusChange);
     setupListener(EventType.BATTERY, handleBattery);
     setupListener(EventType.INTRUDED, handleIntruded);
-    setupListener(EventType.GAS, handleGas);
+    setupListener(EventType.GAS_LEVEL, handleGas);
 };

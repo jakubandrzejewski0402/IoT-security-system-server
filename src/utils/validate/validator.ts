@@ -20,7 +20,7 @@ export const findSchema = (eventType: string) => {
             return intruderSchema;
         case EventType.BATTERY:
             return batterySchema;
-        case EventType.GAS:
+        case EventType.GAS_LEVEL:
             return gasSchema;
         default:
             return null;

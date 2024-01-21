@@ -2,7 +2,7 @@ import { EventRepository } from '../../repository/event.repository';
 import { InternalEvent } from '../../db/mongo.interfaces';
 import { NextFunction, Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
-import logger from '../../config/logger.config';
+import { logRequest } from '../logger';
 
 export const saveAndLogEvent = async (
     req: Request,
@@ -18,6 +18,6 @@ export const saveAndLogEvent = async (
         dateOfCreation: Date.now(),
     };
     await EventRepository.insertOne(event);
-    logger.info(`Received ${req.method} request at ${req.originalUrl}`);
+    logRequest(req);
     next();
 };
